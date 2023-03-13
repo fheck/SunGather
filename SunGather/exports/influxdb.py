@@ -20,7 +20,7 @@ class export_influxdb(object):
         self.influxdb_measurements = [{}]
         self.influxdb_measurements.pop() # Remove null value from list
 
-        if not self.influxdb_config['org'] or not self.influxdb_config['bucket'] or not (self.influxdb_config['token'] or (self.influxdb_config['username'] and self.influxdb_config['password'])):
+        if not self.influxdb_config['org'] or not self.influxdb_config['bucket']:  # or not (self.influxdb_config['token'] or (self.influxdb_config['username'] and self.influxdb_config['password'])):
             logging.warning(f"InfluxDB: Please check configuration")
             return False
 
@@ -35,6 +35,11 @@ class export_influxdb(object):
                 self.client = influxdb_client.InfluxDBClient(
                     url=self.influxdb_config['url'],
                     token=f"{self.influxdb_config['username']}:{self.influxdb_config['password']}",
+                    org=self.influxdb_config['org']
+                )
+            else:
+                self.client = influxdb_client.InfluxDBClient(
+                    url=self.influxdb_config['url'],
                     org=self.influxdb_config['org']
                 )
 
